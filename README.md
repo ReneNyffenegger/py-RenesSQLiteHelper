@@ -12,12 +12,11 @@ pip install RenesSQLiteHelper
 
 ### Create a database
 
-Note the first parameter (`__file__`) to create the database in a
-filesystem path relative to the script using it.
+The database file (Here: `some-data`) is stored by default under `~/.local/share/sqlite-dbs`.
 
 ```python
 from RenesSQLiteHelper import open_db, bulk_load
-con = open_db(__file__, 'some-data.db', deleteIfExists = True)
+con = open_db('some-data', deleteIfExists = True)
 
 con.execute('''
 create table tab (
@@ -27,11 +26,18 @@ create table tab (
 ''')
 ```
 
-### Use the databae
+### Use the database
 
+Bulk load
 ```python
-con = open_db(__file__, 'some-data.db')
+con = open_db('some-data')
 
 with bulk_load(con) as cur:
     cur.execute('insert into tab values (?, ?)', (42, 'hello world'))
+```
+
+Selecting etc
+```python
+for rec in con.execute('select * from tab'):
+    print(f'{rec['id']}: {rec['val']}')
 ```

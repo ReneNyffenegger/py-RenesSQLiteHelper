@@ -4,9 +4,16 @@ import sqlite3
 from pathlib import Path
 import os.path
 
-def open_db(__file__of_includer, db_name, deleteIfExists = False): # {{{
+def open_db(db_name, db_dir = '~/.local/share/sqlite-dbs', deleteIfExists = False): # {{{
 
-    abs_db_path = Path(__file__of_includer).absolute().parent / db_name
+  # Add .db suffix if not provided because the standard bash completion
+  # for sqlite requires .db so that the file is recognized as sqlite database
+    if not db_name.endswith('.db'):
+        db_name = db_name + '.db'
+
+    abs_db_path = Path(db_dir).expanduser() / db_name
+
+    Path(db_dir).expanduser().mkdir(parents=False, exist_ok=True)
 
     db_exists = os.path.isfile(abs_db_path)
     if not deleteIfExists and not db_exists:
@@ -53,6 +60,13 @@ class bulk_load: # {{{ Context manager
 # }}}       
 
 def init_bulk_load(db): # {{{
+ #
+ # TODO: Of course, when the context manager is done,
+ #       these changes should be revereted.
+ # TODO: I believe, the parameter db would be more appropriately
+ #       be called con, but check if the 2nd parameter in
+ #       the constructor.
+ #
    db.execute('pragma synchronous=off'    )
    db.execute('pragma cache_size=4000000' )
    db.execute('pragma journal_mode=memory')
