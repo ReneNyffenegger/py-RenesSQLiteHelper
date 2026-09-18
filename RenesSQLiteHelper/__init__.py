@@ -52,7 +52,7 @@ class bulk_load: # {{{ Context manager
        
    def __exit__(self, exc_type, exc_val, exc_tb):
        if exc_type:
-          print(f'exception in bulk load. {exc_type.__class__}')
+          print(f'Exception in bulk load. {exc_type.__name__}: {exc_val}')
           self.con.rollback()
           return False
 

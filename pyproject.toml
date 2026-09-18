@@ -4,7 +4,7 @@ build-backend   = "setuptools.build_meta"
 
 [project]
 name            = "RenesSQLiteHelper"
-version         = "0.2.0"
+version         = "2026.9.18"
 description     = "René's minimal wrapper around Python's sqlite3 module"
 readme          = "README.md"
 license         = "MIT"
